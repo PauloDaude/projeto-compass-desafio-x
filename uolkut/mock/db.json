@@ -1,0 +1,26 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Linus Torvalds",
+      "email": "linustorvalds@gmail.com",
+      "password": "linus@123",
+      "birth": "1969-12-28",
+      "profession": "Engenheiro de Software",
+      "country": "Finlândia",
+      "city": "Helsinki",
+      "relationship": "Casado"
+    },
+    {
+      "id": 2,
+      "name": "Paulo Daúde",
+      "email": "paulodaude@gmail.com",
+      "password": "paulo@123",
+      "birth": "2004-05-17",
+      "profession": "Estudante",
+      "country": "Brasil",
+      "city": "Paraíso do Tocantins",
+      "relationship": "Namorando"
+    }
+  ]
+}
