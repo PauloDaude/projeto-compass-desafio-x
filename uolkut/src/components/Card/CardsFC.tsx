@@ -9,7 +9,7 @@ type Props = {
   link?: string;
 };
 
-const CardsFC = ({ children, typeCard, link }: Props): JSX.Element => {
+const CardsFC = ({ children, typeCard }: Props): JSX.Element => {
   return (
     <Card classNameCard="card-fc">
       <div className="header-card-profile">

@@ -14,7 +14,7 @@ const EditInformation = (): JSX.Element => {
   const [enteredDate, setEnteredDate] = useState('');
 
   const dateChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let newValue = event.target.value;
+    const newValue = event.target.value;
     const numericValue = newValue.replace(/\D/g, '');
 
     if (numericValue.length >= 1 && numericValue.length <= 8) {

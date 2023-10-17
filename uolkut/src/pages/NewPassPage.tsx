@@ -2,8 +2,7 @@ import Footer from '../components/Footer/Footer';
 import HeaderRegister from '../components/Header/HeaderRegister';
 import NewPass from '../components/NewPass';
 
-type Props = {};
-const NewPassPage = (props: Props) => {
+const NewPassPage = (): JSX.Element => {
   return (
     <div>
       <HeaderRegister />

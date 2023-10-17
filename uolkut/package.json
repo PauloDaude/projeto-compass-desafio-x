@@ -43,6 +43,7 @@
     ]
   },
   "devDependencies": {
+    "json-server": "^0.17.4",
     "prettier": "3.0.3"
   }
 }

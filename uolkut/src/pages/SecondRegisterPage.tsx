@@ -2,8 +2,7 @@ import Footer from '../components/Footer/Footer';
 import HeaderRegister from '../components/Header/HeaderRegister';
 import SecondForm from '../components/SecondForm';
 
-type Props = {};
-const SecondRegisterPage = (props: Props) => {
+const SecondRegisterPage = (): JSX.Element => {
   return (
     <div>
       <HeaderRegister />

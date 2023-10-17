@@ -1,4 +1,4 @@
-import "./UolCircle.css";
+import './UolCircle.css';
 
 const UolCircle = (): JSX.Element => {
   return (

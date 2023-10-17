@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import UolCircle from "./Icons/UolCircle";
-import Card from "./Card/Card";
-import Input from "./StyledComponents/Input";
-import ButtonCreate from "./StyledComponents/ButtonCreate";
-import ButtonCreateAlt from "./StyledComponents/ButtonCreateAlt";
+import UolCircle from './Icons/UolCircle';
+import Card from './Card/Card';
+import Input from './StyledComponents/Input';
+import ButtonCreate from './StyledComponents/ButtonCreate';
+import ButtonCreateAlt from './StyledComponents/ButtonCreateAlt';
 
-import "./Form.css";
-import { Link } from "react-router-dom";
+import './Form.css';
+import { Link } from 'react-router-dom';
 
 const RecoverPass = (): JSX.Element => {
-  const [enteredEmail, setEnteredEmail] = useState("");
+  const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredEmailIsValid, setEnteredEmailIsValid] = useState(true);
 
   const emailChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,7 +18,7 @@ const RecoverPass = (): JSX.Element => {
   };
 
   const submitFormHandler = (event: React.FormEvent) => {
-    if (!enteredEmail.includes("@") || enteredEmail.trim() === "") {
+    if (!enteredEmail.includes('@') || enteredEmail.trim() === '') {
       setEnteredEmailIsValid(false);
       event.preventDefault();
     } else {

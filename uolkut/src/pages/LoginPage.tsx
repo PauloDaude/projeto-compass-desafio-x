@@ -2,8 +2,7 @@ import Login from '../components/Login';
 import HeaderRegister from '../components/Header/HeaderRegister';
 import Footer from '../components/Footer/Footer';
 
-type Props = {};
-const LoginPage = (props: Props): JSX.Element => {
+const LoginPage = (): JSX.Element => {
   return (
     <div>
       <HeaderRegister />

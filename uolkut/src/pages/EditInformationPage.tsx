@@ -1,8 +1,7 @@
 import HeaderProfile from '../components/Header/HeaderProfile';
 import EditInformation from '../components/EditInformations';
 
-type Props = {};
-const EditInformationPage = (props: Props) => {
+const EditInformationPage = (): JSX.Element => {
   return (
     <div>
       <HeaderProfile />

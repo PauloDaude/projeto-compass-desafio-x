@@ -1,34 +1,34 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-import UolCircle from "./Icons/UolCircle";
-import Card from "./Card/Card";
-import Input from "./StyledComponents/Input";
-import ButtonCreate from "./StyledComponents/ButtonCreate";
+import UolCircle from './Icons/UolCircle';
+import Card from './Card/Card';
+import Input from './StyledComponents/Input';
+import ButtonCreate from './StyledComponents/ButtonCreate';
 
-import "./Form.css";
+import './Form.css';
 
 const Register = (): JSX.Element => {
-  const [enteredEmail, setEnteredEmail] = useState("");
+  const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredEmailIsValid, setEnteredEmailIsValid] = useState(true);
 
-  const [enteredPassword, setEnteredPassword] = useState("");
+  const [enteredPassword, setEnteredPassword] = useState('');
   const [enteredPasswordIsValid, setEnteredPasswordIsValid] = useState(true);
 
-  const [enteredName, setEnteredName] = useState("");
+  const [enteredName, setEnteredName] = useState('');
   const [enteredNameIsValid, setEnteredNameIsValid] = useState(true);
 
-  const [enteredDate, setEnteredDate] = useState("");
+  const [enteredDate, setEnteredDate] = useState('');
   const [enteredDateIsValid, setEnteredDateIsValid] = useState(true);
 
-  const [enteredProfession, setEnteredProfession] = useState("");
+  const [enteredProfession, setEnteredProfession] = useState('');
   const [enteredProfessionIsValid, setEnteredProfessionIsValid] =
     useState(true);
 
-  const [enteredCountry, setEnteredCountry] = useState("");
+  const [enteredCountry, setEnteredCountry] = useState('');
   const [enteredCountryIsValid, setEnteredCountryIsValid] = useState(true);
 
-  const [enteredCity, setEnteredCity] = useState("");
+  const [enteredCity, setEnteredCity] = useState('');
   const [enteredCityIsValid, setEnteredCityIsValid] = useState(true);
 
   const emailChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,20 +46,20 @@ const Register = (): JSX.Element => {
   };
 
   const dateChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let newValue = event.target.value;
-    const numericValue = newValue.replace(/\D/g, "");
+    const newValue = event.target.value;
+    const numericValue = newValue.replace(/\D/g, '');
 
     if (numericValue.length >= 1 && numericValue.length <= 8) {
-      let formattedDate = "";
+      let formattedDate = '';
       for (let i = 0; i < numericValue.length; i++) {
         if (i === 2 || i === 4) {
-          formattedDate += "/";
+          formattedDate += '/';
         }
         formattedDate += numericValue[i];
       }
       setEnteredDate(formattedDate);
     } else {
-      setEnteredDate("");
+      setEnteredDate('');
     }
   };
 
@@ -78,7 +78,7 @@ const Register = (): JSX.Element => {
   };
 
   const submitFormHandler = (event: React.FormEvent) => {
-    if (!enteredEmail.includes("@") || enteredEmail.trim() === "") {
+    if (!enteredEmail.includes('@') || enteredEmail.trim() === '') {
       setEnteredEmailIsValid(false);
       event.preventDefault();
     } else {
@@ -90,7 +90,7 @@ const Register = (): JSX.Element => {
     } else {
       setEnteredPasswordIsValid(true);
     }
-    if (enteredName.trim() === "") {
+    if (enteredName.trim() === '') {
       setEnteredNameIsValid(false);
       event.preventDefault();
     } else {
@@ -102,19 +102,19 @@ const Register = (): JSX.Element => {
     } else {
       setEnteredDateIsValid(true);
     }
-    if (enteredProfession.trim() === "") {
+    if (enteredProfession.trim() === '') {
       setEnteredProfessionIsValid(false);
       event.preventDefault();
     } else {
       setEnteredProfessionIsValid(true);
     }
-    if (enteredCountry.trim() === "") {
+    if (enteredCountry.trim() === '') {
       setEnteredCountryIsValid(false);
       event.preventDefault();
     } else {
       setEnteredCountryIsValid(true);
     }
-    if (enteredCity.trim() === "") {
+    if (enteredCity.trim() === '') {
       setEnteredCityIsValid(false);
       event.preventDefault();
     } else {

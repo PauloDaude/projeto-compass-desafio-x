@@ -9,8 +9,7 @@ import './ProfilePage.css';
 import Friends from '../components/InfoProfile/Friends/Friends';
 import Communities from '../components/InfoProfile/Communities/Communities';
 
-type Props = {};
-const ProfilePage = (props: Props): JSX.Element => {
+const ProfilePage = (): JSX.Element => {
   return (
     <div>
       <HeaderProfile />
