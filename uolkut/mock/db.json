@@ -1,7 +1,6 @@
 {
   "users": [
     {
-      "id": 1,
       "name": "Linus Torvalds",
       "email": "linustorvalds@gmail.com",
       "password": "linus@123",
@@ -9,10 +8,10 @@
       "profession": "Engenheiro de Software",
       "country": "Finlândia",
       "city": "Helsinki",
-      "relationship": "Casado"
+      "relationship": "Casado",
+      "id": 1
     },
     {
-      "id": 2,
       "name": "Paulo Daúde",
       "email": "paulodaude@gmail.com",
       "password": "paulo@123",
@@ -20,7 +19,8 @@
       "profession": "Estudante",
       "country": "Brasil",
       "city": "Paraíso do Tocantins",
-      "relationship": "Namorando"
+      "relationship": "Namorando",
+      "id": 2
     }
   ]
 }

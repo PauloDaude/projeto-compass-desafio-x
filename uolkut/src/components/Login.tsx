@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import UolCircle from './Icons/UolCircle';
 import Card from './Card/Card';
@@ -7,9 +7,34 @@ import Input from './StyledComponents/Input';
 import ButtonCreate from './StyledComponents/ButtonCreate';
 import ButtonCreateAlt from './StyledComponents/ButtonCreateAlt';
 
+import { IUser, getUser } from '../services/api';
+
 import './Form.css';
 
+interface IUserLogin {
+  email: string;
+  password: string;
+}
+
 const Login = (): JSX.Element => {
+  const navigate = useNavigate();
+  const [userCredentials, setUserCredentials] = useState<IUserLogin[]>([]);
+
+  useEffect(() => {
+    getUser()
+      .then(users => {
+        const usersArray = Object.values(users);
+        const credentials = usersArray.map((user: IUser) => ({
+          email: user.email,
+          password: user.password
+        }));
+        setUserCredentials(credentials);
+      })
+      .catch(error => {
+        console.error('Erro ao obter usuário:', error.message);
+      });
+  }, []);
+
   const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredEmailIsValid, setEnteredEmailIsValid] = useState(true);
 
@@ -18,27 +43,45 @@ const Login = (): JSX.Element => {
 
   const emailChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEnteredEmail(event.target.value);
+    setEnteredEmailIsValid(true);
   };
 
   const passwordChangeHandler = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setEnteredPassword(event.target.value);
+    setEnteredPasswordIsValid(true);
+  };
+
+  const validateForm = () => {
+    let isValid = false;
+
+    userCredentials.forEach(user => {
+      if (user.email === enteredEmail) {
+        isValid = true;
+        setEnteredEmailIsValid(true);
+      } else {
+        isValid = false;
+        setEnteredEmailIsValid(false);
+      }
+      if (user.password === enteredPassword) {
+        isValid = true;
+        setEnteredPasswordIsValid(true);
+      } else {
+        isValid = false;
+        setEnteredPasswordIsValid(false);
+      }
+    });
+    return isValid;
   };
 
   const submitFormHandler = (event: React.FormEvent) => {
-    if (!enteredEmail.includes('@') || enteredEmail.trim() === '') {
-      setEnteredEmailIsValid(false);
-      event.preventDefault();
-    }
+    event.preventDefault();
+    const isValid = validateForm();
 
-    if (enteredPassword.trim() === '' || enteredPassword.trim().length < 8) {
-      setEnteredPasswordIsValid(false);
-      event.preventDefault();
-      return;
+    if (isValid) {
+      navigate('/profile');
     }
-    setEnteredEmailIsValid(true);
-    setEnteredPasswordIsValid(true);
   };
 
   return (
@@ -84,11 +127,7 @@ const Login = (): JSX.Element => {
               </label>
             </fieldset>
             <div className="form-actions">
-              <Link to="/profile">
-                <ButtonCreate type="submit" onClick={submitFormHandler}>
-                  Entrar na conta
-                </ButtonCreate>
-              </Link>
+              <ButtonCreate type="submit">Entrar na conta</ButtonCreate>
               <Link to="/register">
                 <ButtonCreateAlt type="submit">Criar conta</ButtonCreateAlt>
               </Link>
