@@ -23,8 +23,7 @@ const Login = (): JSX.Element => {
   useEffect(() => {
     getUser()
       .then(users => {
-        const usersArray = Object.values(users);
-        const credentials = usersArray.map((user: IUser) => ({
+        const credentials = users.map((user: IUser) => ({
           email: user.email,
           password: user.password
         }));

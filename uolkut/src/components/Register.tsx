@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+/* eslint-disable indent */
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getUser, IUser } from '../services/api';
 
 import UolCircle from './Icons/UolCircle';
 import Card from './Card/Card';
@@ -9,40 +11,79 @@ import ButtonCreate from './StyledComponents/ButtonCreate';
 import './Form.css';
 
 const Register = (): JSX.Element => {
-  const [enteredEmail, setEnteredEmail] = useState('');
-  const [enteredEmailIsValid, setEnteredEmailIsValid] = useState(true);
+  const navigate = useNavigate();
 
-  const [enteredPassword, setEnteredPassword] = useState('');
-  const [enteredPasswordIsValid, setEnteredPasswordIsValid] = useState(true);
+  const [email, setEmail] = useState<string[]>([]);
+  // const [userData, setUserData] = useState<IUser[]>();
+  useEffect(() => {
+    getUser()
+      .then(users => {
+        // setUserData(users);
+        setEmail(users.map(user => user.email));
+      })
+      .catch(error => {
+        console.error('Erro ao obter usuário:', error.message);
+      });
+  }, []);
 
-  const [enteredName, setEnteredName] = useState('');
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(true);
-
-  const [enteredDate, setEnteredDate] = useState('');
-  const [enteredDateIsValid, setEnteredDateIsValid] = useState(true);
-
-  const [enteredProfession, setEnteredProfession] = useState('');
-  const [enteredProfessionIsValid, setEnteredProfessionIsValid] =
-    useState(true);
-
-  const [enteredCountry, setEnteredCountry] = useState('');
-  const [enteredCountryIsValid, setEnteredCountryIsValid] = useState(true);
-
-  const [enteredCity, setEnteredCity] = useState('');
-  const [enteredCityIsValid, setEnteredCityIsValid] = useState(true);
-
-  const emailChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEnteredEmail(event.target.value);
+  type FormState = {
+    email: { value: string; isValid: boolean | null };
+    password: { value: string; isValid: boolean | null };
+    name: { value: string; isValid: boolean | null };
+    birth: { value: string; isValid: boolean | null };
+    profession: { value: string; isValid: boolean | null };
+    country: { value: string; isValid: boolean | null };
+    city: { value: string; isValid: boolean | null };
   };
 
-  const passwordChangeHandler = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setEnteredPassword(event.target.value);
+  const [formState, setFormState] = useState<FormState>({
+    email: { value: '', isValid: null },
+    password: { value: '', isValid: null },
+    name: { value: '', isValid: null },
+    birth: { value: '', isValid: null },
+    profession: { value: '', isValid: null },
+    country: { value: '', isValid: null },
+    city: { value: '', isValid: null }
+  });
+
+  interface IValidationRules {
+    [fieldName: string]: (value: string) => boolean;
+  }
+
+  const validationRules: IValidationRules = {
+    email: value =>
+      !value.includes('@') || value.trim() === '' || email.includes(value),
+    password: value => value.length <= 8,
+    name: value => value.trim() === '',
+    birth: value => value.trim() === '',
+    profession: value => value.trim() === '',
+    country: value => value.trim() === '',
+    city: value => value.trim() === ''
   };
 
-  const nameChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEnteredName(event.target.value);
+  const validateField = (field: string, value: string) => {
+    return !validationRules[field](value);
+  };
+
+  const isFormValid = () => {
+    for (const field of Object.keys(formState)) {
+      const result = validateField(
+        field,
+        formState[field as keyof FormState].value
+      );
+      formState[field as keyof FormState].isValid = result;
+      if (!result) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const inputChangeHandler = (field: string, value: string): void => {
+    setFormState({
+      ...formState,
+      [field]: { value, isValid: validateField(field, value) }
+    });
   };
 
   const dateChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,68 +98,56 @@ const Register = (): JSX.Element => {
         }
         formattedDate += numericValue[i];
       }
-      setEnteredDate(formattedDate);
+      setFormState({
+        ...formState,
+        ['birth']: {
+          value: formattedDate,
+          isValid: validateField('birth', formattedDate)
+        }
+      });
     } else {
-      setEnteredDate('');
+      setFormState({
+        ...formState,
+        ['birth']: { value: '', isValid: validateField('birth', '') }
+      });
     }
   };
 
-  const professionChangeHandler = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setEnteredProfession(event.target.value);
-  };
-
-  const countryChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEnteredCountry(event.target.value);
-  };
-
-  const cityChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEnteredCity(event.target.value);
-  };
-
-  const submitFormHandler = (event: React.FormEvent) => {
-    if (!enteredEmail.includes('@') || enteredEmail.trim() === '') {
-      setEnteredEmailIsValid(false);
-      event.preventDefault();
+  const submitFormHandler = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isFormValid()) {
+      navigate('/second-register');
     } else {
-      setEnteredEmailIsValid(true);
-    }
-    if (enteredPassword.trim().length < 8) {
-      setEnteredPasswordIsValid(false);
-      event.preventDefault();
-    } else {
-      setEnteredPasswordIsValid(true);
-    }
-    if (enteredName.trim() === '') {
-      setEnteredNameIsValid(false);
-      event.preventDefault();
-    } else {
-      setEnteredNameIsValid(true);
-    }
-    if (enteredDate.trim().length < 10) {
-      setEnteredDateIsValid(false);
-      event.preventDefault();
-    } else {
-      setEnteredDateIsValid(true);
-    }
-    if (enteredProfession.trim() === '') {
-      setEnteredProfessionIsValid(false);
-      event.preventDefault();
-    } else {
-      setEnteredProfessionIsValid(true);
-    }
-    if (enteredCountry.trim() === '') {
-      setEnteredCountryIsValid(false);
-      event.preventDefault();
-    } else {
-      setEnteredCountryIsValid(true);
-    }
-    if (enteredCity.trim() === '') {
-      setEnteredCityIsValid(false);
-      event.preventDefault();
-    } else {
-      setEnteredCityIsValid(true);
+      setFormState({
+        email: {
+          value: formState.email.value,
+          isValid: validateField('email', formState.email.value)
+        },
+        password: {
+          value: formState.password.value,
+          isValid: validateField('password', formState.password.value)
+        },
+        name: {
+          value: formState.name.value,
+          isValid: validateField('name', formState.name.value)
+        },
+        birth: {
+          value: formState.birth.value,
+          isValid: validateField('birth', formState.birth.value)
+        },
+        profession: {
+          value: formState.profession.value,
+          isValid: validateField('profession', formState.profession.value)
+        },
+        country: {
+          value: formState.country.value,
+          isValid: validateField('country', formState.country.value)
+        },
+        city: {
+          value: formState.city.value,
+          isValid: validateField('city', formState.city.value)
+        }
+      });
     }
   };
 
@@ -142,32 +171,33 @@ const Register = (): JSX.Element => {
                 type="email"
                 id="email"
                 placeholder="E-mail"
-                value={enteredEmail}
-                onChange={emailChangeHandler}
+                value={formState.email.value}
+                onChange={e => inputChangeHandler('email', e.target.value)}
               />
-              {!enteredEmailIsValid && (
+              {formState.email.isValid !== null && !formState.email.isValid && (
                 <p className="invalid-input">E-mail inválido</p>
               )}
               <Input
                 type="password"
                 id="password"
                 placeholder="Senha"
-                value={enteredPassword}
-                onChange={passwordChangeHandler}
+                value={formState.password.value}
+                onChange={e => inputChangeHandler('password', e.target.value)}
               />
-              {!enteredPasswordIsValid && (
-                <p className="invalid-input">
-                  A senha precisa conter pelo menos 8 caracteres
-                </p>
-              )}
+              {formState.password.isValid !== null &&
+                !formState.password.isValid && (
+                  <p className="invalid-input">
+                    A senha precisa conter pelo menos 8 caracteres
+                  </p>
+                )}
               <Input
                 type="text"
                 id="name"
                 placeholder="Nome"
-                value={enteredName}
-                onChange={nameChangeHandler}
+                value={formState.name.value}
+                onChange={e => inputChangeHandler('name', e.target.value)}
               />
-              {!enteredNameIsValid && (
+              {formState.name.isValid !== null && !formState.name.isValid && (
                 <p className="invalid-input">Nome inválido</p>
               )}
               <div className="inputs">
@@ -175,16 +205,18 @@ const Register = (): JSX.Element => {
                   type="text"
                   id="birthDate"
                   placeholder="DD/MM/AAAA"
-                  value={enteredDate}
+                  value={formState.birth.value}
                   maxLength={10}
-                  onChange={dateChangeHandler}
+                  onChange={e => dateChangeHandler(e)}
                 />
                 <Input
                   type="text"
                   id="profession"
                   placeholder="Profissão"
-                  value={enteredProfession}
-                  onChange={professionChangeHandler}
+                  value={formState.profession.value}
+                  onChange={e =>
+                    inputChangeHandler('profession', e.target.value)
+                  }
                 />
               </div>
               <div className="inputs">
@@ -192,36 +224,34 @@ const Register = (): JSX.Element => {
                   type="text"
                   id="country"
                   placeholder="País"
-                  value={enteredCountry}
-                  onChange={countryChangeHandler}
+                  value={formState.country.value}
+                  onChange={e => inputChangeHandler('country', e.target.value)}
                 />
                 <Input
                   type="text"
                   id="city"
                   placeholder="Cidade"
-                  value={enteredCity}
-                  onChange={cityChangeHandler}
+                  value={formState.city.value}
+                  onChange={e => inputChangeHandler('city', e.target.value)}
                 />
               </div>
             </div>
             <div className="form-actions">
-              {!enteredDateIsValid && (
+              {formState.birth.isValid !== null && !formState.birth.isValid && (
                 <p className="invalid-input">Data Inválida</p>
               )}
-              {!enteredProfessionIsValid && (
-                <p className="invalid-input">Profissão Inválida</p>
-              )}
-              {!enteredCountryIsValid && (
-                <p className="invalid-input">País Inválido</p>
-              )}
-              {!enteredCityIsValid && (
+              {formState.profession.isValid !== null &&
+                !formState.profession.isValid && (
+                  <p className="invalid-input">Profissão Inválida</p>
+                )}
+              {formState.country.isValid !== null &&
+                !formState.country.isValid && (
+                  <p className="invalid-input">País Inválido</p>
+                )}
+              {formState.city.isValid !== null && !formState.city.isValid && (
                 <p className="invalid-input">Cidade Inválida</p>
               )}
-              <Link to="/second-register">
-                <ButtonCreate type="submit" onClick={submitFormHandler}>
-                  Criar conta
-                </ButtonCreate>
-              </Link>
+              <ButtonCreate type="submit">Criar conta</ButtonCreate>
             </div>
           </form>
         </Card>

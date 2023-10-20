@@ -14,9 +14,9 @@ export interface IUser {
 
 const url = 'http://localhost:3000/users';
 
-export const getUser = async (): Promise<IUser> => {
+export const getUser = async (): Promise<IUser[]> => {
   try {
-    const response: AxiosResponse<IUser> = await axios.get(url);
+    const response: AxiosResponse<IUser[]> = await axios.get(url);
     return response.data;
   } catch (error: Error | unknown) {
     if (isAxiosError(error)) {
@@ -26,9 +26,9 @@ export const getUser = async (): Promise<IUser> => {
   }
 };
 
-export const newUser = async (userData: IUser): Promise<IUser> => {
+export const newUser = async (userData: IUser[]): Promise<IUser[]> => {
   try {
-    const response: AxiosResponse<IUser> = await axios.post(url, userData);
+    const response: AxiosResponse<IUser[]> = await axios.post(url, userData);
     return response.data;
   } catch (error: Error | unknown) {
     if (isAxiosError(error)) {
@@ -38,9 +38,9 @@ export const newUser = async (userData: IUser): Promise<IUser> => {
   }
 };
 
-export const updateUser = async (userData: IUser): Promise<IUser> => {
+export const updateUser = async (userData: IUser[]): Promise<IUser[]> => {
   try {
-    const response: AxiosResponse<IUser> = await axios.put(url, userData);
+    const response: AxiosResponse<IUser[]> = await axios.put(url, userData);
     return response.data;
   } catch (error: Error | unknown) {
     if (isAxiosError(error)) {
