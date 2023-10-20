@@ -1,7 +1,9 @@
 /* eslint-disable indent */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUser, IUser } from '../services/api';
+import { getUser } from '../services/api';
+
+import { useRegisterUser } from '../hooks/useRegisterUser';
 
 import UolCircle from './Icons/UolCircle';
 import Card from './Card/Card';
@@ -10,31 +12,19 @@ import ButtonCreate from './StyledComponents/ButtonCreate';
 
 import './Form.css';
 
+type FormState = {
+  email: { value: string; isValid: boolean | null };
+  password: { value: string; isValid: boolean | null };
+  name: { value: string; isValid: boolean | null };
+  birth: { value: string; isValid: boolean | null };
+  profession: { value: string; isValid: boolean | null };
+  country: { value: string; isValid: boolean | null };
+  city: { value: string; isValid: boolean | null };
+};
+
 const Register = (): JSX.Element => {
   const navigate = useNavigate();
-
-  const [email, setEmail] = useState<string[]>([]);
-  // const [userData, setUserData] = useState<IUser[]>();
-  useEffect(() => {
-    getUser()
-      .then(users => {
-        // setUserData(users);
-        setEmail(users.map(user => user.email));
-      })
-      .catch(error => {
-        console.error('Erro ao obter usuário:', error.message);
-      });
-  }, []);
-
-  type FormState = {
-    email: { value: string; isValid: boolean | null };
-    password: { value: string; isValid: boolean | null };
-    name: { value: string; isValid: boolean | null };
-    birth: { value: string; isValid: boolean | null };
-    profession: { value: string; isValid: boolean | null };
-    country: { value: string; isValid: boolean | null };
-    city: { value: string; isValid: boolean | null };
-  };
+  const { userData, setUserData } = useRegisterUser();
 
   const [formState, setFormState] = useState<FormState>({
     email: { value: '', isValid: null },
@@ -45,6 +35,17 @@ const Register = (): JSX.Element => {
     country: { value: '', isValid: null },
     city: { value: '', isValid: null }
   });
+
+  const [email, setEmail] = useState<string[]>([]);
+  useEffect(() => {
+    getUser()
+      .then(users => {
+        setEmail(users.map(user => user.email));
+      })
+      .catch(error => {
+        console.error('Erro ao obter usuário:', error.message);
+      });
+  }, []);
 
   interface IValidationRules {
     [fieldName: string]: (value: string) => boolean;
@@ -116,6 +117,8 @@ const Register = (): JSX.Element => {
   const submitFormHandler = (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid()) {
+      setUserData(formState);
+
       navigate('/second-register');
     } else {
       setFormState({

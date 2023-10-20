@@ -9,19 +9,11 @@ import SelectEdit from './StyledComponents/SelectEdit';
 import './Form.css';
 
 import { Link } from 'react-router-dom';
+import { useRegisterUser } from '../hooks/useRegisterUser';
 
-type FormState = {
-  email: { value: string; isValid: boolean | null };
-  password: { value: string; isValid: boolean | null };
-  name: { value: string; isValid: boolean | null };
-  birth: { value: string; isValid: boolean | null };
-  profession: { value: string; isValid: boolean | null };
-  country: { value: string; isValid: boolean | null };
-  city: { value: string; isValid: boolean | null };
-};
-
-const SecondForm = ({ formData }: { formData?: FormState }): JSX.Element => {
-  // console.log(formData);
+const SecondForm = (): JSX.Element => {
+  const { userData } = useRegisterUser();
+  console.log(userData);
 
   const submitFormHandler = (event: React.FormEvent) => {
     event.preventDefault();
