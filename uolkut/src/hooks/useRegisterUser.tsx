@@ -1,8 +1,6 @@
 import { create } from 'zustand';
 
 type UserData = {
-  email: { value: string; isValid: boolean | null };
-  password: { value: string; isValid: boolean | null };
   name: { value: string; isValid: boolean | null };
   birth: { value: string; isValid: boolean | null };
   profession: { value: string; isValid: boolean | null };
@@ -17,8 +15,6 @@ type State = {
 
 export const useRegisterUser = create<State>(set => ({
   userData: {
-    email: { value: '', isValid: null },
-    password: { value: '', isValid: null },
     name: { value: '', isValid: null },
     birth: { value: '', isValid: null },
     profession: { value: '', isValid: null },

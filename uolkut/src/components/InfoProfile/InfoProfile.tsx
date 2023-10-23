@@ -1,4 +1,5 @@
-// import { Link } from 'react-router-dom';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { useEffect, useState } from 'react';
 
 import Card from '../Card/Card';
 import './InfoProfile.css';
@@ -9,9 +10,47 @@ import ThumbsUp from '../Icons/emojis/ThumbsUp';
 import Sexy from '../Icons/emojis/Sexy';
 
 import Triangle from '../../assets/images/triangle.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { getUserData } from '../../services/api';
+
+interface IUserData {
+  name: string;
+  birth: string;
+  profession: string;
+  country: string;
+  city: string;
+  relationship: string;
+  whoAmI: string;
+  interests: string;
+  children: number | string;
+  pictureURL: string;
+  favoriteSongs: string;
+  favoriteMovies: string;
+}
 
 const InfoProfile = (): JSX.Element => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!localStorage.getItem('token')) {
+      navigate('/login');
+    }
+  }, []);
+
+  const [userData, setUserData] = useState<IUserData[]>([]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const id: string = localStorage.getItem('userID')!;
+      const fetchedUserData = await getUserData(parseInt(id));
+      setUserData(fetchedUserData);
+    };
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    console.log(userData);
+  }, [userData]);
+
   return (
     <Card classNameCard="card-profile-info">
       <h3 className="title-info-profile">Boa tarde, Linus Torvalds</h3>

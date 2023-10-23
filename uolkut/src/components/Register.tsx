@@ -3,8 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUser } from '../services/api';
 
-import { useRegisterUser } from '../hooks/useRegisterUser';
-
 import UolCircle from './Icons/UolCircle';
 import Card from './Card/Card';
 import Input from './StyledComponents/Input';
@@ -12,9 +10,7 @@ import ButtonCreate from './StyledComponents/ButtonCreate';
 
 import './Form.css';
 
-type FormState = {
-  email: { value: string; isValid: boolean | null };
-  password: { value: string; isValid: boolean | null };
+export type FirstUserData = {
   name: { value: string; isValid: boolean | null };
   birth: { value: string; isValid: boolean | null };
   profession: { value: string; isValid: boolean | null };
@@ -22,18 +18,31 @@ type FormState = {
   city: { value: string; isValid: boolean | null };
 };
 
+export type UserCredencials = {
+  email: { value: string; isValid: boolean | null };
+  password: { value: string; isValid: boolean | null };
+};
+
 const Register = (): JSX.Element => {
   const navigate = useNavigate();
-  const { userData, setUserData } = useRegisterUser();
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      navigate('/profile');
+    }
+  }, []);
+  localStorage.clear();
 
-  const [formState, setFormState] = useState<FormState>({
-    email: { value: '', isValid: null },
-    password: { value: '', isValid: null },
+  const [formUserData, setFormUserData] = useState<FirstUserData>({
     name: { value: '', isValid: null },
     birth: { value: '', isValid: null },
     profession: { value: '', isValid: null },
     country: { value: '', isValid: null },
     city: { value: '', isValid: null }
+  });
+
+  const [userCredencials, setUserCredencials] = useState<UserCredencials>({
+    email: { value: '', isValid: null },
+    password: { value: '', isValid: null }
   });
 
   const [email, setEmail] = useState<string[]>([]);
@@ -67,12 +76,12 @@ const Register = (): JSX.Element => {
   };
 
   const isFormValid = () => {
-    for (const field of Object.keys(formState)) {
+    for (const field of Object.keys(formUserData)) {
       const result = validateField(
         field,
-        formState[field as keyof FormState].value
+        formUserData[field as keyof FirstUserData].value
       );
-      formState[field as keyof FormState].isValid = result;
+      formUserData[field as keyof FirstUserData].isValid = result;
       if (!result) {
         return false;
       }
@@ -81,8 +90,14 @@ const Register = (): JSX.Element => {
   };
 
   const inputChangeHandler = (field: string, value: string): void => {
-    setFormState({
-      ...formState,
+    setFormUserData({
+      ...formUserData,
+      [field]: { value, isValid: validateField(field, value) }
+    });
+  };
+  const inputChangeHandlerUser = (field: string, value: string): void => {
+    setUserCredencials({
+      ...userCredencials,
       [field]: { value, isValid: validateField(field, value) }
     });
   };
@@ -99,16 +114,16 @@ const Register = (): JSX.Element => {
         }
         formattedDate += numericValue[i];
       }
-      setFormState({
-        ...formState,
+      setFormUserData({
+        ...formUserData,
         ['birth']: {
           value: formattedDate,
           isValid: validateField('birth', formattedDate)
         }
       });
     } else {
-      setFormState({
-        ...formState,
+      setFormUserData({
+        ...formUserData,
         ['birth']: { value: '', isValid: validateField('birth', '') }
       });
     }
@@ -117,38 +132,41 @@ const Register = (): JSX.Element => {
   const submitFormHandler = (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid()) {
-      setUserData(formState);
+      localStorage.setItem('userData', JSON.stringify(formUserData));
+      localStorage.setItem('users', JSON.stringify(userCredencials));
 
       navigate('/second-register');
     } else {
-      setFormState({
-        email: {
-          value: formState.email.value,
-          isValid: validateField('email', formState.email.value)
-        },
-        password: {
-          value: formState.password.value,
-          isValid: validateField('password', formState.password.value)
-        },
+      setFormUserData({
         name: {
-          value: formState.name.value,
-          isValid: validateField('name', formState.name.value)
+          value: formUserData.name.value,
+          isValid: validateField('name', formUserData.name.value)
         },
         birth: {
-          value: formState.birth.value,
-          isValid: validateField('birth', formState.birth.value)
+          value: formUserData.birth.value,
+          isValid: validateField('birth', formUserData.birth.value)
         },
         profession: {
-          value: formState.profession.value,
-          isValid: validateField('profession', formState.profession.value)
+          value: formUserData.profession.value,
+          isValid: validateField('profession', formUserData.profession.value)
         },
         country: {
-          value: formState.country.value,
-          isValid: validateField('country', formState.country.value)
+          value: formUserData.country.value,
+          isValid: validateField('country', formUserData.country.value)
         },
         city: {
-          value: formState.city.value,
-          isValid: validateField('city', formState.city.value)
+          value: formUserData.city.value,
+          isValid: validateField('city', formUserData.city.value)
+        }
+      });
+      setUserCredencials({
+        email: {
+          value: userCredencials.email.value,
+          isValid: validateField('email', userCredencials.email.value)
+        },
+        password: {
+          value: userCredencials.password.value,
+          isValid: validateField('password', userCredencials.password.value)
         }
       });
     }
@@ -174,21 +192,24 @@ const Register = (): JSX.Element => {
                 type="email"
                 id="email"
                 placeholder="E-mail"
-                value={formState.email.value}
-                onChange={e => inputChangeHandler('email', e.target.value)}
+                value={userCredencials.email.value}
+                onChange={e => inputChangeHandlerUser('email', e.target.value)}
               />
-              {formState.email.isValid !== null && !formState.email.isValid && (
-                <p className="invalid-input">E-mail inválido</p>
-              )}
+              {userCredencials.email.isValid !== null &&
+                !userCredencials.email.isValid && (
+                  <p className="invalid-input">E-mail inválido</p>
+                )}
               <Input
                 type="password"
                 id="password"
                 placeholder="Senha"
-                value={formState.password.value}
-                onChange={e => inputChangeHandler('password', e.target.value)}
+                value={userCredencials.password.value}
+                onChange={e =>
+                  inputChangeHandlerUser('password', e.target.value)
+                }
               />
-              {formState.password.isValid !== null &&
-                !formState.password.isValid && (
+              {userCredencials.password.isValid !== null &&
+                !userCredencials.password.isValid && (
                   <p className="invalid-input">
                     A senha precisa conter pelo menos 8 caracteres
                   </p>
@@ -197,18 +218,19 @@ const Register = (): JSX.Element => {
                 type="text"
                 id="name"
                 placeholder="Nome"
-                value={formState.name.value}
+                value={formUserData.name.value}
                 onChange={e => inputChangeHandler('name', e.target.value)}
               />
-              {formState.name.isValid !== null && !formState.name.isValid && (
-                <p className="invalid-input">Nome inválido</p>
-              )}
+              {formUserData.name.isValid !== null &&
+                !formUserData.name.isValid && (
+                  <p className="invalid-input">Nome inválido</p>
+                )}
               <div className="inputs">
                 <Input
                   type="text"
                   id="birthDate"
                   placeholder="DD/MM/AAAA"
-                  value={formState.birth.value}
+                  value={formUserData.birth.value}
                   maxLength={10}
                   onChange={e => dateChangeHandler(e)}
                 />
@@ -216,7 +238,7 @@ const Register = (): JSX.Element => {
                   type="text"
                   id="profession"
                   placeholder="Profissão"
-                  value={formState.profession.value}
+                  value={formUserData.profession.value}
                   onChange={e =>
                     inputChangeHandler('profession', e.target.value)
                   }
@@ -227,33 +249,35 @@ const Register = (): JSX.Element => {
                   type="text"
                   id="country"
                   placeholder="País"
-                  value={formState.country.value}
+                  value={formUserData.country.value}
                   onChange={e => inputChangeHandler('country', e.target.value)}
                 />
                 <Input
                   type="text"
                   id="city"
                   placeholder="Cidade"
-                  value={formState.city.value}
+                  value={formUserData.city.value}
                   onChange={e => inputChangeHandler('city', e.target.value)}
                 />
               </div>
             </div>
             <div className="form-actions">
-              {formState.birth.isValid !== null && !formState.birth.isValid && (
-                <p className="invalid-input">Data Inválida</p>
-              )}
-              {formState.profession.isValid !== null &&
-                !formState.profession.isValid && (
+              {formUserData.birth.isValid !== null &&
+                !formUserData.birth.isValid && (
+                  <p className="invalid-input">Data Inválida</p>
+                )}
+              {formUserData.profession.isValid !== null &&
+                !formUserData.profession.isValid && (
                   <p className="invalid-input">Profissão Inválida</p>
                 )}
-              {formState.country.isValid !== null &&
-                !formState.country.isValid && (
+              {formUserData.country.isValid !== null &&
+                !formUserData.country.isValid && (
                   <p className="invalid-input">País Inválido</p>
                 )}
-              {formState.city.isValid !== null && !formState.city.isValid && (
-                <p className="invalid-input">Cidade Inválida</p>
-              )}
+              {formUserData.city.isValid !== null &&
+                !formUserData.city.isValid && (
+                  <p className="invalid-input">Cidade Inválida</p>
+                )}
               <ButtonCreate type="submit">Criar conta</ButtonCreate>
             </div>
           </form>

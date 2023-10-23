@@ -1,25 +1,45 @@
 {
   "users": [
     {
-      "name": "Linus Torvalds",
-      "email": "linustorvalds@gmail.com",
-      "password": "linus@123",
-      "birth": "1969-12-28",
-      "profession": "Engenheiro de Software",
-      "country": "Finlândia",
-      "city": "Helsinki",
-      "relationship": "Casado",
+      "email": "paulodaude14@gmail.com",
+      "password": "$2a$10$RogpKqZYIDdMLMV/NGrWROFExWNdKwUDyT7WDofmTf83LOxwuPfjS",
       "id": 1
     },
     {
+      "email": "rafael@gmail.com",
+      "password": "$2a$10$beaMoEam39hlREzEKguEdewdMYpL/Y9Cv.h4wzBNuRgb1ty05KfzG",
+      "id": 2
+    }
+  ],
+  "informations": [
+    {
       "name": "Paulo Daúde",
-      "email": "paulodaude@gmail.com",
-      "password": "paulo@123",
-      "birth": "2004-05-17",
-      "profession": "Estudante",
+      "birth": "17/05/2004",
+      "profession": "Programador",
       "country": "Brasil",
       "city": "Paraíso do Tocantins",
       "relationship": "Namorando",
+      "whoAmI": "Sou o Paulo",
+      "interests": "Ser contratado",
+      "children": "0",
+      "pictureURL": "não tem",
+      "favoriteSongs": "song",
+      "favoriteMovies": "movie",
+      "id": 1
+    },
+    {
+      "name": "Rafael",
+      "birth": "17/05/2004",
+      "profession": "Programador",
+      "country": "Brasil",
+      "city": "Manaus",
+      "relationship": "Solteiro",
+      "whoAmI": "Rafael Instrutor",
+      "interests": "Ganhar aumento",
+      "children": "0",
+      "pictureURL": "não tem",
+      "favoriteSongs": "song",
+      "favoriteMovies": "movie",
       "id": 2
     }
   ]

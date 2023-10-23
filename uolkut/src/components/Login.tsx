@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import UolCircle from './Icons/UolCircle';
@@ -7,32 +7,13 @@ import Input from './StyledComponents/Input';
 import ButtonCreate from './StyledComponents/ButtonCreate';
 import ButtonCreateAlt from './StyledComponents/ButtonCreateAlt';
 
-import { IUser, getUser } from '../services/api';
+import { loginUser } from '../services/api';
 
 import './Form.css';
 
-interface IUserLogin {
-  email: string;
-  password: string;
-}
-
 const Login = (): JSX.Element => {
+  localStorage.clear();
   const navigate = useNavigate();
-  const [userCredentials, setUserCredentials] = useState<IUserLogin[]>([]);
-
-  useEffect(() => {
-    getUser()
-      .then(users => {
-        const credentials = users.map((user: IUser) => ({
-          email: user.email,
-          password: user.password
-        }));
-        setUserCredentials(credentials);
-      })
-      .catch(error => {
-        console.error('Erro ao obter usuário:', error.message);
-      });
-  }, []);
 
   const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredEmailIsValid, setEnteredEmailIsValid] = useState(true);
@@ -52,34 +33,20 @@ const Login = (): JSX.Element => {
     setEnteredPasswordIsValid(true);
   };
 
-  const validateForm = () => {
-    let isValid = false;
-
-    userCredentials.forEach(user => {
-      if (user.email === enteredEmail) {
-        isValid = true;
-        setEnteredEmailIsValid(true);
-      } else {
-        isValid = false;
-        setEnteredEmailIsValid(false);
-      }
-      if (user.password === enteredPassword) {
-        isValid = true;
-        setEnteredPasswordIsValid(true);
-      } else {
-        isValid = false;
-        setEnteredPasswordIsValid(false);
-      }
-    });
-    return isValid;
-  };
-
-  const submitFormHandler = (event: React.FormEvent) => {
+  const submitFormHandler = async (event: React.FormEvent) => {
     event.preventDefault();
-    const isValid = validateForm();
+    const isValid = true;
 
-    if (isValid) {
+    const userLogged = await loginUser(enteredEmail, enteredPassword);
+
+    if (isValid && userLogged) {
+      setEnteredEmailIsValid(true);
+      setEnteredPasswordIsValid(true);
+      localStorage.setItem('userID', userLogged.user.id);
       navigate('/profile');
+    } else {
+      setEnteredEmailIsValid(false);
+      setEnteredPasswordIsValid(false);
     }
   };
 
