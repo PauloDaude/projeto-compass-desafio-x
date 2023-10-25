@@ -24,7 +24,6 @@ export const pictureURL = (url: string, profilePhoto: string) => {
 const ProfilePage = (): JSX.Element => {
   const navigate = useNavigate();
   const { userData, setUserData } = useUserData();
-  console.log(userData);
 
   useEffect(() => {
     const fetchUserData = async () => {

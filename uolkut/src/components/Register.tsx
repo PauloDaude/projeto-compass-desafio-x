@@ -60,12 +60,33 @@ const Register = (): JSX.Element => {
     [fieldName: string]: (value: string) => boolean;
   }
 
+  const dateIsValid = (formattedDate: string): boolean => {
+    const arrayDate = formattedDate.split('/');
+    const day = parseInt(arrayDate[0]);
+    const month = parseInt(arrayDate[1]);
+    const year = parseInt(arrayDate[2]);
+
+    const date = new Date();
+    const actualYear = date.getFullYear();
+    if (
+      day > 0 &&
+      day <= 31 &&
+      month > 0 &&
+      month <= 12 &&
+      year > actualYear - 100 &&
+      year <= actualYear
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   const validationRules: IValidationRules = {
     email: value =>
       !value.includes('@') || value.trim() === '' || email.includes(value),
-    password: value => value.length <= 8,
+    password: value => value.length < 8,
     name: value => value.trim() === '',
-    birth: value => value.trim() === '',
+    birth: value => !dateIsValid(value),
     profession: value => value.trim() === '',
     country: value => value.trim() === '',
     city: value => value.trim() === ''
@@ -114,6 +135,7 @@ const Register = (): JSX.Element => {
         }
         formattedDate += numericValue[i];
       }
+
       setFormUserData({
         ...formUserData,
         ['birth']: {
