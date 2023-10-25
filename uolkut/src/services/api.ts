@@ -18,14 +18,16 @@ export interface IUserData {
   favoriteMovies: string;
 }
 
-export interface IUser {
+export interface IUserCredencials {
   email: string;
   password: string;
+  id?: number;
 }
 
-export const getUser = async (): Promise<IUser[]> => {
+export const getUserCredencials = async (): Promise<IUserCredencials[]> => {
   try {
-    const response: AxiosResponse<IUser[]> = await axios.get('/users');
+    const response: AxiosResponse<IUserCredencials[]> =
+      await axios.get('/users');
     return response.data;
   } catch (error: Error | unknown) {
     if (isAxiosError(error)) {
@@ -35,9 +37,9 @@ export const getUser = async (): Promise<IUser[]> => {
   }
 };
 
-export const getUserData = async (id: number): Promise<IUserData[]> => {
+export const getUserData = async (id: number): Promise<IUserData> => {
   try {
-    const response: AxiosResponse<IUserData[]> = await axios.get(
+    const response: AxiosResponse<IUserData> = await axios.get(
       `/informations/${id}`
     );
     return response.data;
@@ -49,7 +51,9 @@ export const getUserData = async (id: number): Promise<IUserData[]> => {
   }
 };
 
-export const newUserCredencials = async (user: IUser): Promise<void> => {
+export const newUserCredencials = async (
+  user: IUserCredencials
+): Promise<void> => {
   try {
     const response = await axios.post('/users', user);
     return response.data.accessToken;
@@ -60,6 +64,7 @@ export const newUserCredencials = async (user: IUser): Promise<void> => {
     throw new Error('Falha ao criar as credenciais de usuário');
   }
 };
+
 export const newUserData = async (userData: IUserData): Promise<void> => {
   try {
     await axios.post('/informations', userData);
@@ -71,24 +76,44 @@ export const newUserData = async (userData: IUserData): Promise<void> => {
   }
 };
 
-export const updateUser = async (
-  userData: IUserData[]
-): Promise<IUserData[]> => {
+export const updateUserData = async (
+  userData: IUserData,
+  id: number
+): Promise<void> => {
   try {
-    const response: AxiosResponse<IUserData[]> = await axios.put(
-      '/informations',
-      userData
-    );
-    return response.data;
+    await axios.put(`/informations/${id}`, userData);
   } catch (error: Error | unknown) {
     if (isAxiosError(error)) {
       console.error('Error:', error.message);
     }
-    throw new Error('Falha ao criar um novo usuário');
+    throw new Error('Falha ao editar os dados do usuário');
   }
 };
 
-export const loginUser = async (
+export const updateUserPassword = async (
+  password: string,
+  id: number
+): Promise<void> => {
+  try {
+    const userCredencials = await getUserCredencials();
+    const userCorrect = userCredencials.filter(user =>
+      user.id === id ? user : null
+    );
+    const updatedUserCredencials = {
+      ...userCorrect[0],
+      email: userCorrect[0].email,
+      password: password
+    };
+    await axios.put(`/users/${id}`, updatedUserCredencials);
+  } catch (error: Error | unknown) {
+    if (isAxiosError(error)) {
+      console.error('Error:', error.message);
+    }
+    throw new Error('Falha ao editar os dados do usuário');
+  }
+};
+
+export const loginUserCredencials = async (
   enteredEmail: string,
   enteredPassword: string
 ): Promise<any> => {

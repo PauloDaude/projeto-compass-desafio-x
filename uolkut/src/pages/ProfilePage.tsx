@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Card from '../components/Card/Card';
 import HeaderProfile from '../components/Header/HeaderProfile';
 import InfoProfile from '../components/InfoProfile/InfoProfile';
@@ -8,8 +10,35 @@ import ProfilePhoto from '../assets/images/profile-img.png';
 import './ProfilePage.css';
 import Friends from '../components/InfoProfile/Friends/Friends';
 import Communities from '../components/InfoProfile/Communities/Communities';
+import { useUserData } from '../hooks/useUserData';
+import { getUserData } from '../services/api';
+
+export const pictureURL = (url: string, profilePhoto: string) => {
+  if (url !== '' && (url.includes('.jpg') || url.includes('.jpg'))) {
+    return url;
+  } else {
+    return profilePhoto;
+  }
+};
 
 const ProfilePage = (): JSX.Element => {
+  const navigate = useNavigate();
+  const { userData, setUserData } = useUserData();
+  console.log(userData);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const id: string = localStorage.getItem('userID')!;
+      try {
+        const fetchedUserData = await getUserData(parseInt(id));
+        setUserData(fetchedUserData);
+      } catch {
+        navigate('/login');
+      }
+    };
+    fetchUserData();
+  }, []);
+
   return (
     <div>
       <HeaderProfile />
@@ -23,9 +52,20 @@ const ProfilePage = (): JSX.Element => {
         </div>
         <div className="box-left-profile">
           <Card classNameCard="profile-photo">
-            <img src={ProfilePhoto} alt="foto de perfil" />
-            <p className="name-profile">Linus Torvalds</p>
-            <p className="status-profile">Casado, Estados Unidos</p>
+            {userData.pictureURL !== '' ? (
+              <>
+                <img
+                  src={pictureURL(userData.pictureURL, ProfilePhoto)}
+                  alt="foto de perfil"
+                />
+                <p className="name-profile">{userData.name}</p>
+                <p className="status-profile">
+                  {userData.relationship}, {userData.country}
+                </p>
+              </>
+            ) : (
+              <p className="invalid-input">Carregando dados...</p>
+            )}
           </Card>
           <Link to="/profile/edit-information">
             <Card classNameCard="edit-profile">

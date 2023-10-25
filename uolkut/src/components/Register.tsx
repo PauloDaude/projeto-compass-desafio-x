@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUser } from '../services/api';
+import { getUserCredencials } from '../services/api';
 
 import UolCircle from './Icons/UolCircle';
 import Card from './Card/Card';
@@ -47,7 +47,7 @@ const Register = (): JSX.Element => {
 
   const [email, setEmail] = useState<string[]>([]);
   useEffect(() => {
-    getUser()
+    getUserCredencials()
       .then(users => {
         setEmail(users.map(user => user.email));
       })

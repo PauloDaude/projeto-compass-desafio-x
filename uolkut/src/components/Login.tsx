@@ -7,7 +7,7 @@ import Input from './StyledComponents/Input';
 import ButtonCreate from './StyledComponents/ButtonCreate';
 import ButtonCreateAlt from './StyledComponents/ButtonCreateAlt';
 
-import { loginUser } from '../services/api';
+import { loginUserCredencials } from '../services/api';
 
 import './Form.css';
 
@@ -37,7 +37,10 @@ const Login = (): JSX.Element => {
     event.preventDefault();
     const isValid = true;
 
-    const userLogged = await loginUser(enteredEmail, enteredPassword);
+    const userLogged = await loginUserCredencials(
+      enteredEmail,
+      enteredPassword
+    );
 
     if (isValid && userLogged) {
       setEnteredEmailIsValid(true);

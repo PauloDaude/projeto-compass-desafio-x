@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useEffect, useState } from 'react';
@@ -12,7 +13,11 @@ import SelectEdit from './StyledComponents/SelectEdit';
 import './Form.css';
 
 import { FirstUserData, UserCredencials } from './Register';
-import { newUserCredencials, newUserData } from '../services/api';
+import {
+  getUserCredencials,
+  newUserCredencials,
+  newUserData
+} from '../services/api';
 
 import { userSchema } from '../validations/secondFormValidation';
 
@@ -42,6 +47,8 @@ const SecondForm = (): JSX.Element => {
   const navigate = useNavigate();
   let usersData: FirstUserData | undefined = undefined;
   let users: UserCredencials | undefined = undefined;
+
+  const [userID, setUserID] = useState<number>();
 
   try {
     usersData = JSON.parse(localStorage.getItem('userData')!);
@@ -119,6 +126,16 @@ const SecondForm = (): JSX.Element => {
     return await userSchema.isValid(formData);
   };
 
+  useEffect(() => {
+    getUserCredencials()
+      .then(users => {
+        setUserID(users[users.length - 1].id);
+      })
+      .catch(error => {
+        console.error('Erro ao obter usuário:', error.message);
+      });
+  }, []);
+
   const submitFormHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -131,6 +148,7 @@ const SecondForm = (): JSX.Element => {
       const tokenAcess = await newUserCredencials(usersCredencials);
       localStorage.setItem('token', tokenAcess!);
       localStorage.removeItem('userData');
+      localStorage.setItem('userID', (userID! + 1).toString());
       navigate('/profile');
     } else {
       console.log('Dados de cadastro inválidos.');

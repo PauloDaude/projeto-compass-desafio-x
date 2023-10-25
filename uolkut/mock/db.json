@@ -2,18 +2,33 @@
   "users": [
     {
       "email": "paulodaude14@gmail.com",
-      "password": "$2a$10$RogpKqZYIDdMLMV/NGrWROFExWNdKwUDyT7WDofmTf83LOxwuPfjS",
+      "password": "$2a$10$5lLXxiR48je7BhebTBAME.OR4Xpm6u/IaI226y6XJwJrWjEfomVtO",
       "id": 1
     },
     {
       "email": "rafael@gmail.com",
       "password": "$2a$10$beaMoEam39hlREzEKguEdewdMYpL/Y9Cv.h4wzBNuRgb1ty05KfzG",
       "id": 2
+    },
+    {
+      "email": "matheus@gmail.com",
+      "password": "$2a$10$rBfrBBNYJcLoqTsUhgPqE.wPU5a/opqvMznzfQZCNCAEKaGh62mre",
+      "id": 3
+    },
+    {
+      "email": "guilherme@gmail.com",
+      "password": "$2a$10$bfG8eyuNEB3KXo1FbhywreNASmpMUZBbc/4XDPYwYWL8orSoctPUW",
+      "id": 4
+    },
+    {
+      "email": "thatiane@gmail.com",
+      "password": "$2a$10$gvJLESC7z5EELhsLLJwHXesrjHVkcgHbvFI4Phb8BmylRvc0VIJ6S",
+      "id": 5
     }
   ],
   "informations": [
     {
-      "name": "Paulo Daúde",
+      "name": "Paulo Eduardo Araújo Daúde",
       "birth": "17/05/2004",
       "profession": "Programador",
       "country": "Brasil",
@@ -22,14 +37,14 @@
       "whoAmI": "Sou o Paulo",
       "interests": "Ser contratado",
       "children": "0",
-      "pictureURL": "não tem",
-      "favoriteSongs": "song",
-      "favoriteMovies": "movie",
+      "pictureURL": "https://i.ibb.co/qgXTzN7/unnamed.jpg",
+      "favoriteSongs": "Sertanejo, Rap, Pop",
+      "favoriteMovies": "Interestelar, Avangers EndGame",
       "id": 1
     },
     {
-      "name": "Rafael",
-      "birth": "17/05/2004",
+      "name": "Rafael Nascimento",
+      "birth": "17/05/2000",
       "profession": "Programador",
       "country": "Brasil",
       "city": "Manaus",
@@ -41,6 +56,51 @@
       "favoriteSongs": "song",
       "favoriteMovies": "movie",
       "id": 2
+    },
+    {
+      "name": "Matheus Klug",
+      "birth": "22/03/2003",
+      "profession": "Desenvolvedor",
+      "country": "Brasil",
+      "city": "Pelotas",
+      "relationship": "Namorando",
+      "whoAmI": "Sou o Matheus",
+      "interests": "Ser contratado",
+      "children": "0",
+      "pictureURL": "https://i.ibb.co/hCLKj93/333392428-239539555079457-581657169729979384-n.jpg",
+      "favoriteSongs": "Pop, Rock, Rap, Funk, Pagode",
+      "favoriteMovies": "Harry Potter, Velozes e Furiosos",
+      "id": 3
+    },
+    {
+      "name": "Guilherme Rocha",
+      "birth": "15/11/2000",
+      "profession": "Desenvolvedor",
+      "country": "Brasil",
+      "city": "Paraíso do Tocantins",
+      "relationship": "Preocupado",
+      "whoAmI": "Sou o Guilherme",
+      "interests": "Qualquer coisa",
+      "children": "0",
+      "pictureURL": "não tem",
+      "favoriteSongs": "pop, mpb, rock, sertanejo",
+      "favoriteMovies": "Matilda, Cincerela",
+      "id": 4
+    },
+    {
+      "name": "Thatiane de O. Rosa",
+      "birth": "02/11/1986",
+      "profession": "Professora",
+      "country": "Brasil",
+      "city": "Ituiutaba",
+      "relationship": "Casado",
+      "whoAmI": "Eu",
+      "interests": "Alguma coisa",
+      "children": "0",
+      "pictureURL": "não tem",
+      "favoriteSongs": "música",
+      "favoriteMovies": "filme",
+      "id": 5
     }
   ]
 }
